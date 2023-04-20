@@ -11,8 +11,8 @@ import moment from 'moment';
 
 const FORMAT_DATE = 'DD/MM/YYYY';
 
-// const fromDate = moment().subtract(3, "days").format(FORMAT_DATE);
-// const toDate = moment().subtract(3, "days").format(FORMAT_DATE);
+// const fromDate = moment().subtract(3, "days");
+// const toDate = moment().format(FORMAT_DATE);
 
 const headerExel = [
   { label: 'STT', key: 'index' },
@@ -35,6 +35,7 @@ const Unique = () => {
   const tempErr: any = useRef([]);
   const totalItem = useRef(0);
   const count = useRef(0);
+  const [form] = Form.useForm();
 
   useEffect(() => {
 
@@ -76,6 +77,9 @@ const Unique = () => {
         }
       }
       if (count.current === totalItem.current) {
+        tempList.current.forEach((item, index) => {
+          item.index = index + 1;
+        });
         setDataList(tempList.current);
       }
     }, () => {
@@ -147,8 +151,12 @@ const Unique = () => {
     setValueArea(value);
   }
 
+  const onEnter = (e) => {
+
+  }
+
   return (
-    <div className="min-h-screen bg-primary-black px-4 pt-32 pb-44">
+    <div className="min-h-screen bg-primary-black px-4 pt-24 pb-44">
       <div className='container'>
         <Form name="basic" className="w-1/3 space-x-5 flex items-center" onFinish={handleSubmit}>
           <InputForm
@@ -160,43 +168,51 @@ const Unique = () => {
             medium text-white bg-indigo-600" >Save token</Button>
         </Form>
 
-        <div className="mt-12 text-center">
-          <div className="grid grid-cols-3 gap-20">
-            <TextArea
-              rows={15}
-              onBlur={convertText}
-              value={valueArea}
-              onChange={changeArea}
-            />
-            <div className="col-span-2 flex space-x-16">
-              <ul className="list-disc list-outside text-left text-white relative">
-                {phoneList.map(item => (
-                  <li className="mb-1">{item}</li>
-                ))}
-                <p className='mr-6 medium text-white absolute -top-8 left-7 text-base'>({phoneList.length})</p>
-              </ul>
-              <ul className="list-disc list-outside text-left text-red-500">
-                {phoneErr.map(item => (
-                  <li className="mb-1">{item}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <Form onFinish={onSearch} className='flex items-center space-x-10 mt-8'>
+        <div className="mt-12">
+          <Form onFinish={onSearch} className='mt-8' form={form}>
             <Form.Item name='time' rules={RULE_REQUIRE} className="mb-0">
               <DatePicker.RangePicker
                 className='h-9 rounded'
                 format="DD/MM/YYYY"
                 placeholder={['Từ ngày', 'Đến ngày']}
               />
+
             </Form.Item>
-            <Button type="primary" className='h-9 rounded bg-primary-green px-12' size='large' htmlType="submit">Tìm kiếm</Button>
-            <CSVLink data={dataList} headers={headerExel} filename={`report(${moment().format('DD-MM-YYYY HH:mm')}).csv`}>
-              <Button className='bg-primary-orange px-8 h-9 rounded' type='primary'>
-                Xuất exel</Button>
-            </CSVLink>
-            <Button className='bg-gray-300 px-8 h-9 rounded text-black' type='primary' onClick={resetData}>
-              RESET</Button>
+
+            <div className="grid grid-cols-3 mt-6 gap-20">
+              <TextArea
+                rows={10}
+                onBlur={convertText}
+                onPressEnter={onEnter}
+                value={valueArea}
+                onChange={changeArea}
+              />
+              <div className="col-span-2 flex space-x-16">
+                <div className="relative">
+                  <ul className="list-disc list-inside text-left text-white max-h-80 overflow-y-auto w-32">
+                    {phoneList.map(item => (
+                      <li className="mb-1">{item}</li>
+                    ))}
+                  </ul>
+                  <p className='mr-6 medium text-yellow-400 absolute -top-8 left-7 text-base'>({phoneList.length})</p>
+                </div>
+                <ul className="list-disc list-outside text-left text-red-500">
+                  {phoneErr.map(item => (
+                    <li className="mb-1">{item}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-10 mt-8">
+              <Button type="primary" className='h-9 rounded bg-primary-green px-12' size='large' htmlType="submit">Tìm kiếm</Button>
+              <CSVLink data={dataList} headers={headerExel} filename={`report(${moment().format('DD-MM-YYYY HH:mm')}).csv`}>
+                <Button className='bg-primary-orange px-8 h-9 rounded' type='primary'>
+                  Xuất exel</Button>
+              </CSVLink>
+              <Button className='bg-gray-300 px-8 h-9 rounded text-black' type='primary' onClick={resetData}>
+                RESET</Button>
+            </div>
           </Form>
           <Table
             className="w-3/4 mt-10"

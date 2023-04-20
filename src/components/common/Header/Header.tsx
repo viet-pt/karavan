@@ -67,7 +67,6 @@ const Header = () => {
               <div className='flex-between space-x-5 w-1/2 -translate-x-11'>
                 <Link href="/" className='hover:no-underline'>
                   <img alt="home" src="/imgs/logo.svg" className='w-8 mx-auto mb-2' />
-                  <h3 className='mb-0 font-apoc text-lg text-center leading-5'>Explorations<br />Company</h3>
                 </Link>
                 <Link href="/">Enquire</Link>
                 <Link href="/">Impact</Link>

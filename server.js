@@ -4,8 +4,7 @@ const next = require("next");
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const routers = require("./src/routers");
-const handle = routers.getRequestHandler(app);
+const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
     const server = express();
