@@ -1,0 +1,2 @@
+export const BACKEND_API = process.env.NODE_ENV == 'production' ? `${process.env.CLIENT_URL}/apiprod` : process.env.REACT_APP_BACKEND_URL;
+export const CAPTCHA_KEY = '6LdFPs0aAAAAAMtAVsZSJHenaCB7kGCTX-rCo4fl';
